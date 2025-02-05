@@ -7,17 +7,21 @@
 ###### Commands:
 ###### First installation of Needed Libraries and Programs
 
-> $ sudo apt update
+```
+sudo apt update
 
-> $ sudo apt -y install openvpn easy-rsa unzip firewalld
+sudo apt -y install openvpn easy-rsa unzip firewalld
+```
 
 ###### Extracting then Copying and editing openvpn config file
 
-> $ gunzip /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz
+```
+gunzip /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz
 
-> $ cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/
+cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/
 
-> $ nano /etc/openvpn/server.conf
+nano /etc/openvpn/server.conf
+```
 
 ###### Using Ctrl+W search short key: look for these and uncomment them (by removing ; semicolon)
 ###### #uncomment bellow
@@ -40,39 +44,45 @@
 ###### Then Ctrl+X to Exit nano, Press Y to save then enter to overwrite
 ###### Now
 
-> $ cd /usr/share/easy-rsa/
+```
+cd /usr/share/easy-rsa/
 
-> $ ./easyrsa init-pki
+./easyrsa init-pki
 
-> $ ./easyrsa build-ca nopass
+./easyrsa build-ca nopass
 
-> // Leave blank, press enter
+// Leave blank, press enter
 
-> $ ./easyrsa gen-req server nopass
+./easyrsa gen-req server nopass
 
-> // Leave blank, press enter
+// Leave blank, press enter
 
-> $ ./easyrsa gen-req client nopass
+./easyrsa gen-req client nopass
 
-> // Leave blank, press enter
+// Leave blank, press enter
 
-> $ ./easyrsa sign-req server server nopass
+./easyrsa sign-req server server nopass
 
-> yes
+yes
 
-> $ ./easyrsa sign-req client client nopass
+./easyrsa sign-req client client nopass
 
-> yes
+yes
 
-> $ ./easyrsa gen-dh
+./easyrsa gen-dh
+```
 
 ###### Then you wait for awhile, depends on the Computer Hardware Specs
-> $ cd pki
+```
+cd pki
 
-> $ pwd
+pwd
+```
 
 ###### copy the path to use it afterwards: /usr/share/easy-rsa/pki
-> $ nano /etc/openvpn/server.conf
+```
+nano /etc/openvpn/server.conf
+```
 
 ###### Using Ctrl+W search short key: look for these and change them:
 > ca ca.crt
@@ -100,53 +110,65 @@ to
 ###### Then Ctrl+X to Exit nano, Press Y to save then enter to overwrite
 
 ###### Then we enable ip forwarding
-> $ sysctl -w net.ipv4.ip_forward=1
+```
+sysctl -w net.ipv4.ip_forward=1
 
-> $ sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+```
 
 ###### We install firewall if not already installed, then we configure it
-> $ systemctl status firewalld
+```
+systemctl status firewalld
 
-> $ firewall-cmd --set-default=trusted
+firewall-cmd --set-default=trusted
 
-> $ firewall-cmd --permanent --zone=trusted --add-masquerade
+firewall-cmd --permanent --zone=trusted --add-masquerade
 
-> $ firewall-cmd --permanent --add-service openvpn
+firewall-cmd --permanent --add-service openvpn
 
-> $ firewall-cmd --reload
+firewall-cmd --reload
 
-> $ firewall-cmd --list-all
+firewall-cmd --list-all
+```
 
 ###### We start openvpn
-> $ systemctl start openvpn@server
+```
+systemctl start openvpn@server
 
-> $ systemctl enable openvpn@server
+systemctl enable openvpn@server
 
-> $ systemctl status openvpn@server
+systemctl status openvpn@server
+```
 
 ###### Then to create Clients
 # Create and Setup Clients
 ###### Use the shell script file i wrote to generate clients keys very easily
 ###### Download it from this github repo: OpenVPNClientsKeysGenerator.sh
 ###### Download it with wget and unzip
-> $ cd ~
+```
+cd ~
 
-> $ wget https://github.com/TarikSeyceri/Setup-OpenVPN-Server-in-Linux-Ubuntu.sh/archive/refs/heads/main.zip
+wget https://github.com/TarikSeyceri/Setup-OpenVPN-Server-in-Linux-Ubuntu.sh/archive/refs/heads/main.zip
 
-> $ unzip -qq main.zip && rm -rf main.zip
+unzip -qq main.zip && rm -rf main.zip
 
-> $ cd Setup-OpenVPN-Server-in-Linux-Ubuntu.sh-main
+cd Setup-OpenVPN-Server-in-Linux-Ubuntu.sh-main
 
-> $ nano OpenVPNClientsKeysGenerator.sh
+nano OpenVPNClientsKeysGenerator.sh
+```
 ###### Modify 'server_static_ip_address' variable to work with your Server's IP Address
 
 ###### To authorise the file to be executed
-> $ sed -i -e 's/\r$//' OpenVPNClientsKeysGenerator.sh
+```
+sed -i -e 's/\r$//' OpenVPNClientsKeysGenerator.sh
 
-> $ sudo chmod +x OpenVPNClientsKeysGenerator.sh
+sudo chmod +x OpenVPNClientsKeysGenerator.sh
+```
 
 ###### Then you can run it with
-> $ ./OpenVPNClientsKeysGenerator.sh
+```
+./OpenVPNClientsKeysGenerator.sh
+```
 
 ###### Follow the instructions in the Script
 ###### It will only ask for the client username, make sure it is unique
