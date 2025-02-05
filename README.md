@@ -9,13 +9,11 @@
 
 > $ sudo apt update
 
-> $ sudo apt -y install openvpn easy-rsa nano wget unzip firewalld
+> $ sudo apt -y install openvpn easy-rsa unzip firewalld
 
 ###### Extracting then Copying and editing openvpn config file
 
-> $ cd /usr/share/doc/openvpn/examples/sample-config-files
-
-> $ gunzip server.conf.gz
+> $ gunzip /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz
 
 > $ cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/
 
@@ -31,7 +29,7 @@
 
 > user nobody
 
-> group nobody
+> group nogroup
 
 ###### #comment this
 > ;tls-auth ta.key 0
@@ -107,10 +105,6 @@ to
 > $ sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 
 ###### We install firewall if not already installed, then we configure it
-> $ systemctl start firewalld
-
-> $ systemctl enable firewalld
-
 > $ systemctl status firewalld
 
 > $ firewall-cmd --set-default=trusted
@@ -137,11 +131,11 @@ to
 ###### Download it with wget and unzip
 > $ cd ~
 
-> $ wget https://github.com/TarikSeyceri/Setup-VPN-Server-OpenVPN-Server-in-Linux-Ubuntu/archive/master.zip
+> $ wget https://github.com/TarikSeyceri/Setup-OpenVPN-Server-in-Linux-Ubuntu.sh/archive/refs/heads/main.zip
 
-> $ unzip -qq master.zip && rm -rf master.zip
+> $ unzip -qq main.zip && rm -rf main.zip
 
-> $ cd Setup-VPN-Server-OpenVPN-Server-in-Linux-Ubuntu-master
+> $ cd Setup-OpenVPN-Server-in-Linux-Ubuntu.sh-main
 
 > $ nano OpenVPNClientsKeysGenerator.sh
 ###### Modify 'server_static_ip_address' variable to work with your Server's IP Address
@@ -161,11 +155,13 @@ to
 ###### For Other OS OpenVPN or Other VPN Client Programs ( Google it :) )
 
 # Setup OpenVPN Client in Windows
-###### Download the THE_CLIENT_USERNAME.ovpn file from the server using SFTP or SSH and send it to the Client Computer.
+###### Download the THE_CLIENT_USERNAME.ovpn file from the server using SFTP (E.g. using WinSCP) or SSH and send it to the Client Computer.
+
 ###### Download the OpenVPN Client from: https://openvpn.net/community-downloads/ and then double click install Next — Next — Next
-###### Open the location of the OpenVPN Client after installation => From Desktop => OpenVPN GUI => right click => Properties => Open File Location
-###### Go back one level up, then go to config folder: the path should be something like: C:\Program Files\OpenVPN\config
-###### Copy the THE_CLIENT_USERNAME.ovpn inside the config folder then close the window
-###### from the Desktop run OpenVPN GUI, from the TaskBar you will see the OpenVPN icon, right click => connect. Done.
+
+###### From Desktop => OpenVPN GUI => Double Click to run it => Then => From Taskbar => System Tray => Right click on OpenVPN icon => Import => Import file...
+
+###### Then right click again on OpenVPN icon => connect. Done.
+
 ###### Enjoy!
 

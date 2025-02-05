@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #Setting constants
-path_to_rsa="/usr/share/easy-rsa"
-path_to_root_document="/root/Documents"
 server_static_ip_address="X.X.X.X" #Host Server IP Address
+path_to_root_document="/root/Documents"
+path_to_rsa="/usr/share/easy-rsa"
 server_openvpn_port="1194"
 server_openvpn_protocol="udp"
 
