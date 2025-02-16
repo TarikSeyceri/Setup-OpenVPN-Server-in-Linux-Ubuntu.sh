@@ -2,14 +2,16 @@
 
 ###### Very simple steps to create your own VPN Server and use it with Multiple Clients.
 
-###### This tutorial works great on Ubuntu 20.04 LTS
+###### This tutorial works great on Ubuntu 20.04/24.04 LTS
 
 ###### Commands:
 ###### First installation of Needed Libraries and Programs
 
 ```
 sudo apt update
+```
 
+```
 sudo apt -y install openvpn easy-rsa unzip firewalld
 ```
 
@@ -17,9 +19,19 @@ sudo apt -y install openvpn easy-rsa unzip firewalld
 
 ```
 gunzip /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz
+```
 
+```
 cp /usr/share/doc/openvpn/examples/sample-config-files/server.conf /etc/openvpn/
+```
 
+###### Note if 'server.conf.gz' file wasn't there, you can directly download 'server.conf' from openvpn's official github repo
+
+```
+wget -P /etc/openvpn/ https://raw.githubusercontent.com/OpenVPN/openvpn/refs/heads/master/sample/sample-config-files/server.conf
+```
+
+```
 nano /etc/openvpn/server.conf
 ```
 
@@ -30,6 +42,14 @@ nano /etc/openvpn/server.conf
 > push "dhcp-option DNS 208.67.222.222" # change dns to whatever you want (e.g. 8.8.8.8)
 
 > push "dhcp-option DNS 208.67.220.220" # change dns to whatever you want (e.g. 1.1.1.1)
+
+###### Make sure
+
+> user openvpn
+
+> group openvpn
+
+###### Are renamed to
 
 > user nobody
 
@@ -46,36 +66,52 @@ nano /etc/openvpn/server.conf
 
 ```
 cd /usr/share/easy-rsa/
+```
 
+```
 ./easyrsa init-pki
+```
 
+```
 ./easyrsa build-ca nopass
+```
 
 // Leave blank, press enter
 
+```
 ./easyrsa gen-req server nopass
+```
 
 // Leave blank, press enter
 
+```
 ./easyrsa gen-req client nopass
+```
 
 // Leave blank, press enter
 
+```
 ./easyrsa sign-req server server nopass
+```
 
 yes
 
+```
 ./easyrsa sign-req client client nopass
+```
 
 yes
 
+```
 ./easyrsa gen-dh
 ```
 
 ###### Then you wait for awhile, depends on the Computer Hardware Specs
 ```
 cd pki
+```
 
+```
 pwd
 ```
 
@@ -112,31 +148,47 @@ to
 ###### Then we enable ip forwarding
 ```
 sysctl -w net.ipv4.ip_forward=1
+```
 
+```
 sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
 ```
 
 ###### We install firewall if not already installed, then we configure it
 ```
 systemctl status firewalld
+```
 
+```
 firewall-cmd --set-default=trusted
+```
 
+```
 firewall-cmd --permanent --zone=trusted --add-masquerade
+```
 
+```
 firewall-cmd --permanent --add-service openvpn
+```
 
+```
 firewall-cmd --reload
+```
 
+```
 firewall-cmd --list-all
 ```
 
 ###### We start openvpn
 ```
 systemctl start openvpn@server
+```
 
+```
 systemctl enable openvpn@server
+```
 
+```
 systemctl status openvpn@server
 ```
 
@@ -147,13 +199,21 @@ systemctl status openvpn@server
 ###### Download it with wget and unzip
 ```
 cd ~
+```
 
+```
 wget https://github.com/TarikSeyceri/Setup-OpenVPN-Server-in-Linux-Ubuntu.sh/archive/refs/heads/main.zip
+```
 
+```
 unzip -qq main.zip && rm -rf main.zip
+```
 
+```
 cd Setup-OpenVPN-Server-in-Linux-Ubuntu.sh-main
+```
 
+```
 nano OpenVPNClientsKeysGenerator.sh
 ```
 ###### Modify 'server_static_ip_address' variable to work with your Server's IP Address
@@ -161,7 +221,9 @@ nano OpenVPNClientsKeysGenerator.sh
 ###### To authorise the file to be executed
 ```
 sed -i -e 's/\r$//' OpenVPNClientsKeysGenerator.sh
+```
 
+```
 sudo chmod +x OpenVPNClientsKeysGenerator.sh
 ```
 

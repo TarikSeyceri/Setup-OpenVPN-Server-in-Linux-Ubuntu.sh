@@ -21,6 +21,8 @@ remote-cert-tls server\n
 cipher AES-256-CBC\n
 route-metric 1\n
 redirect-gateway def1\n
+ignore-unknown-option block-outside-dns\n
+setenv opt block-outside-dns # Prevent Windows 10 DNS leak\n
 \n
 ";
 
